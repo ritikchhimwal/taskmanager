@@ -4,9 +4,16 @@ const path = require('path');
 const bodyParser = require('body-parser');
 
 const app = express();
-const API = "https://taskmanager-frontend-gilt.vercel.app/";
+const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+const frontendURL = 'https://taskmanager-frontend-gilt.vercel.app';
+
+// Configure CORS to allow requests from frontend URL
+app.use(cors({
+  origin: frontendURL,
+}));
+
+// Body parser middleware
 app.use(bodyParser.json());
 
 // Serve static files from the React app
@@ -14,7 +21,8 @@ app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 let tasks = [];
 
-app.get('API/tasks', (req, res) => {
+// Endpoint to get all tasks
+app.get('/api/tasks', (req, res) => {
   try {
     res.json(tasks);
   } catch (error) {
@@ -22,7 +30,8 @@ app.get('API/tasks', (req, res) => {
   }
 });
 
-app.post('API/tasks', (req, res) => {
+// Endpoint to add a task
+app.post('/api/tasks', (req, res) => {
   try {
     const task = { id: Date.now(), ...req.body };
     tasks.push(task);
@@ -32,7 +41,8 @@ app.post('API/tasks', (req, res) => {
   }
 });
 
-app.put('API/tasks/:id', (req, res) => {
+// Endpoint to update a task
+app.put('/api/tasks/:id', (req, res) => {
   try {
     const { id } = req.params;
     const updatedTask = req.body;
@@ -44,7 +54,8 @@ app.put('API/tasks/:id', (req, res) => {
   }
 });
 
-app.delete('API/tasks/:id', (req, res) => {
+// Endpoint to delete a task
+app.delete('/api/tasks/:id', (req, res) => {
   try {
     const { id } = req.params;
     tasks = tasks.filter(task => task.id !== parseInt(id));
@@ -54,10 +65,12 @@ app.delete('API/tasks/:id', (req, res) => {
   }
 });
 
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
 
+// Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
