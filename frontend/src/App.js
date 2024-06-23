@@ -4,7 +4,6 @@ import AddTask from "./components/AddTask";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const API_URL = "https://taskmanager-seven-chi.vercel.app/";
 const App = () => {
   const [tasks, setTasks] = useState([]);
 
@@ -14,7 +13,7 @@ const App = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/tasks`);
+      const res = await fetch("http://localhost:5000/tasks");
       if (!res.ok) throw new Error("Failed to fetch tasks");
       const data = await res.json();
       setTasks(data);
@@ -25,7 +24,7 @@ const App = () => {
 
   const addTask = async (task) => {
     try {
-      const res = await fetch(`${API_URL}/api/tasks`, {
+      const res = await fetch("http://localhost:5000/tasks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -43,7 +42,7 @@ const App = () => {
 
   const deleteTask = async (id) => {
     try {
-      const res = await fetch(`${API_URL}/api/tasks/${id}`, {
+      const res = await fetch(`http://localhost:5000/tasks/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Failed to delete task");
@@ -56,7 +55,7 @@ const App = () => {
 
   const updateTask = async (updatedTask) => {
     try {
-      const res = await fetch(`${API_URL}/api/tasks/${updatedTask.id}`, {
+      const res = await fetch(`http://localhost:5000/tasks/${updatedTask.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
