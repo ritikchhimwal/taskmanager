@@ -4,7 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const API = "https://taskmanager-frontend-gilt.vercel.app/";
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 let tasks = [];
 
-app.get('/tasks', (req, res) => {
+app.get('API/tasks', (req, res) => {
   try {
     res.json(tasks);
   } catch (error) {
@@ -22,7 +22,7 @@ app.get('/tasks', (req, res) => {
   }
 });
 
-app.post('/tasks', (req, res) => {
+app.post('API/tasks', (req, res) => {
   try {
     const task = { id: Date.now(), ...req.body };
     tasks.push(task);
@@ -32,7 +32,7 @@ app.post('/tasks', (req, res) => {
   }
 });
 
-app.put('/tasks/:id', (req, res) => {
+app.put('API/tasks/:id', (req, res) => {
   try {
     const { id } = req.params;
     const updatedTask = req.body;
@@ -44,7 +44,7 @@ app.put('/tasks/:id', (req, res) => {
   }
 });
 
-app.delete('/tasks/:id', (req, res) => {
+app.delete('API/tasks/:id', (req, res) => {
   try {
     const { id } = req.params;
     tasks = tasks.filter(task => task.id !== parseInt(id));
